@@ -26,25 +26,25 @@ class NavigationMenu {
   }
 
   /** li level teratas berdasarkan label (case-insensitive). */
-  topLevelItem(label) {
+  topLevelItem(label: string) {
     return this.topLevelItems()
       .filter((_, li) => {
         const a = li.querySelector(':scope > a')
-        return a && a.textContent.trim().toLowerCase().startsWith(label.toLowerCase())
+        return !!a && (a.textContent ?? '').trim().toLowerCase().startsWith(label.toLowerCase())
       })
       .first()
   }
 
-  expand(label) {
+  expand(label: string) {
     this.topLevelItem(label).children('a').click()
     this.topLevelItem(label).should('have.class', 'menu-open')
   }
 
   /** Link sub-menu di dalam sebuah grup menu berdasarkan label. */
-  subMenuLink(groupLabel, subLabel) {
+  subMenuLink(groupLabel: string, subLabel: string) {
     return this.topLevelItem(groupLabel)
       .find('ul a')
-      .filter((_, a) => a.textContent.replace(/\s+/g, ' ').trim().toLowerCase() === subLabel.toLowerCase())
+      .filter((_, a) => (a.textContent ?? '').replace(/\s+/g, ' ').trim().toLowerCase() === subLabel.toLowerCase())
       .first()
   }
 }

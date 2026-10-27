@@ -15,7 +15,7 @@ class KalkulatorZakatPage {
     return cy.get('form#form_penghasilan')
   }
 
-  field(name) {
+  field(name: string) {
     return cy.get(`form#form_penghasilan input[name="${name}"]`)
   }
 
@@ -43,7 +43,7 @@ class KalkulatorZakatPage {
     return this.field('total_zakat')
   }
 
-  button(text) {
+  button(text: string) {
     return this.form().contains('button', text)
   }
 
@@ -63,7 +63,7 @@ class KalkulatorZakatPage {
     return this.form().find('.zakat_penghasilan')
   }
 
-  isiPenghasilan(gaji, lain = 0) {
+  isiPenghasilan(gaji: number, lain = 0) {
     this.gaji().typeNominal(gaji)
     this.penghasilanLain().typeNominal(lain)
   }

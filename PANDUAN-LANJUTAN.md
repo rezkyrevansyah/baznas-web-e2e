@@ -258,7 +258,8 @@ Gunakan prompt Sesi 3, dengan perubahan berikut:
 Tambahkan kalimat ini di akhir prompt:
 
 ```text
-Catatan Batch D: install `cypress-axe` dan `axe-core` sebagai devDependency. Test
+Catatan Batch D: install `cypress-axe` dan `axe-core` sebagai devDependency (tambahkan
+"cypress-axe" ke `types` di tsconfig.json agar `cy.checkA11y` bertipe). Test
 aksesibilitas dan performa bertag @a11y / @perf dan tidak boleh menggagalkan pipeline
 utama: buat script npm terpisah (test:a11y, test:perf), dan default `npm test` tetap
 mengecualikan @known-bug saja. Hasil pelanggaran a11y dicetak ke log/report (gunakan
@@ -270,8 +271,9 @@ disimpan di fixture.
 
 ```text
 Baca @CLAUDE.md. Tugas Sesi 7: finishing project.
-1. Tambahkan ESLint (flat config) + eslint-plugin-cypress dan Prettier. Script: lint, format.
-   Perbaiki semua error lint. Tambahkan langkah lint di workflow CI sebelum Cypress.
+1. Tambahkan ESLint (flat config) + typescript-eslint + eslint-plugin-cypress dan Prettier.
+   Script: lint, format. Perbaiki semua error lint. Tambahkan langkah lint di workflow CI
+   sebelum Cypress (setelah langkah typecheck).
 2. Publikasikan report HTML ke GitHub Pages lewat workflow (job deploy terpisah setelah
    test, hanya untuk branch main dan jadwal harian). Tambahkan link report di README.
    Tuliskan langkah manual yang harus saya klik di Settings → Pages.
@@ -314,7 +316,7 @@ Baca @CLAUDE.md. Tugas Sesi 8: siapkan bahan laporan.
 ### 3.2 Aturan keamanan production (WAJIB)
 
 1. **Jangan pernah** mengirim data ke server: tidak ada submit form, transaksi, pendaftaran newsletter, atau konfirmasi pembayaran sungguhan.
-2. `cypress/support/e2e.js` sudah memblokir semua request `POST/PUT/PATCH/DELETE` dari halaman. **Jangan hapus atau melemahkan blocker ini.**
+2. `cypress/support/e2e.ts` sudah memblokir semua request `POST/PUT/PATCH/DELETE` dari halaman. **Jangan hapus atau melemahkan blocker ini.**
 3. Untuk endpoint spesifik, tambahkan stub eksplisit dengan alias, lalu assert endpoint tersebut **tidak** terpanggil. Contoh:
    - `POST **/pembayaran/submit_customer`
    - `POST **/verifycaptcha.php` (stub body `'false'`)
@@ -333,7 +335,7 @@ Baca @CLAUDE.md. Tugas Sesi 8: siapkan bahan laporan.
 | Bug website | Expected result tetap sesuai perilaku yang benar. Tambahkan tag `@known-bug` dan komentar `// Temuan F-xx: ...` di atas test. Catat temuannya di sheet Temuan Eksplorasi |
 | Page Object | Satu class per halaman di `cypress/pages`, diekspor sebagai instance (`export default new XPage()`) |
 | Nilai acuan | Nisab, tarif, daftar opsi, URL, dan pesan validasi disimpan di `cypress/fixtures/*.json`, bukan di-hardcode di spec |
-| Helper | `toNumber`, `formatRibuan` dari `cypress/support/commands.js`; custom command `typeNominal`, `checkUrlStatus`, `assertNoBrokenLinks` |
+| Helper | `toNumber`, `formatRibuan` dari `cypress/support/commands.ts`; custom command `typeNominal`, `checkUrlStatus`, `assertNoBrokenLinks` |
 | Assertion | Gunakan assertion yang retry (`should`). Hindari `cy.wait(<ms>)` kecuali jeda antar request |
 | Konten dinamis | Assert struktur dan keberadaan data, bukan isi teks berita/banner tertentu |
 | Commit | Conventional commits: `test: …`, `fix(test): …`, `docs: …`, `chore: …` |
@@ -345,7 +347,7 @@ Baca @CLAUDE.md. Tugas Sesi 8: siapkan bahan laporan.
   - support: `const { register } = require('@cypress/grep'); register()`
   - config: `const { plugin } = require('@cypress/grep/plugin'); plugin(config)`
   - Filter negatif (`-@tag`) **tidak kompatibel** dengan `grepFilterSpecs`.
-- Default di `cypress.config.js`: `grepTags: '-@known-bug'`.
+- Default di `cypress.config.ts`: `grepTags: '-@known-bug'`.
 - **Subdomain berbeda origin.** `baznas.go.id` dan `bayarzakat.baznas.go.id` adalah origin berbeda (injectDocumentDomain = false):
   - Test yang langsung `cy.visit('https://bayarzakat.baznas.go.id/bayarzakat')` tidak butuh `cy.origin`.
   - Navigasi lewat klik dari `baznas.go.id` ke subdomain membutuhkan `cy.origin('https://bayarzakat.baznas.go.id', () => {...})`. Di dalam callback tidak bisa memakai import/closure luar; kirim data lewat `args`.
@@ -502,7 +504,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
 ### Batch A (28 test case)
 
 
-#### Kalkulator Zakat → `cypress/e2e/kalkulator-zakat.cy.js`
+#### Kalkulator Zakat → `cypress/e2e/kalkulator-zakat.cy.ts`
 
 - **TC-CALC-008 | Nominal besar diformat dan dihitung dengan benar** — P2, Boundary, tag `@regression` + `@P2`
   - Pre-condition: Buka https://baznas.go.id/kalkulatorzakat, Jenis Zakat = PENGHASILAN
@@ -556,7 +558,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: Emas = 50 gram
   - Expected: Dinyatakan belum mencapai nisab
 
-#### Form Bayar Zakat Online → `cypress/e2e/bayar-zakat.cy.js`
+#### Form Bayar Zakat Online → `cypress/e2e/bayar-zakat.cy.ts`
 
 - **TC-PAY-004 | Sub-jenis Infak sesuai** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Buka https://baznas.go.id/bayarzakat (redirect ke bayarzakat.baznas.go.id)
@@ -607,7 +609,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Expected: Zakat maal dihitung 2,5% x (harta - hutang) bila >= nisab
   - Catatan: Rumus dikonfirmasi ke tim bisnis
 
-#### Form Jemput Zakat → `cypress/e2e/jemput-zakat.cy.js`
+#### Form Jemput Zakat → `cypress/e2e/jemput-zakat.cy.ts`
 
 - **TC-JMP-001 | Form jemput zakat tampil lengkap** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -638,7 +640,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Expected: Tanggal lampau tidak dapat dipilih / ditolak
   - Catatan: Lihat temuan F-09
 
-#### Konfirmasi ZIS → `cypress/e2e/konfirmasi-zis.cy.js`
+#### Konfirmasi ZIS → `cypress/e2e/konfirmasi-zis.cy.ts`
 
 - **TC-KONF-001 | Halaman konfirmasi ZIS tampil** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -652,7 +654,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: href = https://bazn.as/konfirmasi dan URL merespons 2xx/3xx
 
-#### Subscribe Newsletter → `cypress/e2e/newsletter.cy.js`
+#### Subscribe Newsletter → `cypress/e2e/newsletter.cy.ts`
 
 - **TC-NWSL-001 | Email kosong tidak dapat di-subscribe** — P3, Negative, tag `@regression` + `@P3`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -669,7 +671,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
 ### Batch B (16 test case)
 
 
-#### Konten Edukasi ZIS → `cypress/e2e/edukasi-zis.cy.js`
+#### Konten Edukasi ZIS → `cypress/e2e/edukasi-zis.cy.ts`
 
 - **TC-EDU-001 | Halaman edukasi ZIS dapat diakses** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -688,7 +690,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: iframe video tampil dengan src valid
 
-#### Berita & Publikasi → `cypress/e2e/berita.cy.js`
+#### Berita & Publikasi → `cypress/e2e/berita.cy.ts`
 
 - **TC-NEWS-001 | Halaman daftar berita tampil** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -716,7 +718,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: /video-all, /artikel-all, /newsletter-all, /berkah-zakat-all
   - Expected: Status 200; daftar konten tampil; embed video ter-load
 
-#### Laporan & Dokumen → `cypress/e2e/laporan.cy.js`
+#### Laporan & Dokumen → `cypress/e2e/laporan.cy.ts`
 
 - **TC-LAP-001 | Halaman laporan keuangan menampilkan dokumen** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -735,7 +737,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: Status 200 dan konten tampil
 
-#### Profil & Informasi Lembaga → `cypress/e2e/profil.cy.js`
+#### Profil & Informasi Lembaga → `cypress/e2e/profil.cy.ts`
 
 - **TC-PROF-001 | Halaman profil lembaga dapat diakses** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -759,7 +761,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: Status 200 dan daftar entri tampil
 
-#### Program BAZNAS → `cypress/e2e/program.cy.js`
+#### Program BAZNAS → `cypress/e2e/program.cy.ts`
 
 - **TC-PROG-001 | Halaman program BAZNAS dapat diakses** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -771,7 +773,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
 ### Batch C (14 test case)
 
 
-#### Homepage → `cypress/e2e/home.cy.js`
+#### Homepage → `cypress/e2e/home.cy.ts`
 
 - **TC-HOME-003 | Tidak ada error JavaScript saat homepage dimuat** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -801,7 +803,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: Halaman detail terbuka, judul pada detail sama dengan judul di kartu (abaikan '...' terpotong)
 
-#### Header & Menu Navigasi → `cypress/e2e/navigation.cy.js`
+#### Header & Menu Navigasi → `cypress/e2e/navigation.cy.ts`
 
 - **TC-NAV-006 | Sub-menu Profil Program, Kabar, Laporan, Jaringan mengarah ke halaman benar** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Menu hamburger terbuka
@@ -809,7 +811,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: Lihat fixture menu.json
   - Expected: Setiap halaman terbuka dengan status 200
 
-#### Footer → `cypress/e2e/footer.cy.js`
+#### Footer → `cypress/e2e/footer.cy.ts`
 
 - **TC-FTR-001 | Link Kebijakan Privasi, Syarat & Ketentuan, FAQ berfungsi** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -828,7 +830,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: Teks 'Copyright © {tahun berjalan} BAZNAS' tampil
 
-#### Multi-bahasa → `cypress/e2e/i18n.cy.js`
+#### Multi-bahasa → `cypress/e2e/i18n.cy.ts`
 
 - **TC-I18N-001 | Dropdown bahasa berisi 3 pilihan** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -852,7 +854,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: Halaman /zakat tetap tampil dalam Bahasa Inggris
 
-#### Error Handling → `cypress/e2e/error-page.cy.js`
+#### Error Handling → `cypress/e2e/error-page.cy.ts`
 
 - **TC-ERR-001 | URL tidak dikenal menampilkan halaman 404** — P2, Negative, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -864,7 +866,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
 ### Batch D (13 test case)
 
 
-#### Responsive → `cypress/e2e/responsive.cy.js`
+#### Responsive → `cypress/e2e/responsive.cy.ts`
 
 - **TC-RESP-001 | Homepage di viewport mobile** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -887,7 +889,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: Seluruh field dapat diisi; tombol tidak tertutup bottom nav
 
-#### SEO & Metadata → `cypress/e2e/seo.cy.js`
+#### SEO & Metadata → `cypress/e2e/seo.cy.ts`
 
 - **TC-SEO-001 | Setiap halaman utama memiliki title yang sesuai** — P3, Positive, tag `@regression` + `@P3`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -906,7 +908,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: Favicon tersedia dan merespons 200
 
-#### Integritas Link → `cypress/e2e/broken-links.cy.js`
+#### Integritas Link → `cypress/e2e/broken-links.cy.ts`
 
 - **TC-LINK-003 | Tidak ada gambar rusak di homepage** — P2, Positive, tag `@regression` + `@P2`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -914,7 +916,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: Semua gambar memiliki naturalWidth > 0
 
-#### Aksesibilitas Dasar → `cypress/e2e/accessibility.cy.js`
+#### Aksesibilitas Dasar → `cypress/e2e/accessibility.cy.ts`
 
 - **TC-A11Y-001 | Pemeriksaan aksesibilitas homepage** — P3, Positive, tag `@a11y` + `@P3`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -933,7 +935,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
   - Data: -
   - Expected: Setiap input memiliki label yang terhubung
 
-#### Performa Dasar → `cypress/e2e/performance.cy.js`
+#### Performa Dasar → `cypress/e2e/performance.cy.ts`
 
 - **TC-PERF-001 | Waktu muat homepage** — P3, Positive, tag `@perf` + `@P3`
   - Pre-condition: Browser terbuka, koneksi internet aktif
@@ -954,7 +956,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
 |---|---|---|
 | `npm ci` gagal | Versi Node terlalu lama / tidak ada `package-lock.json` | Cek `node -v` ≥ 20. Jika lock file hilang, jalankan `npm install` |
 | `Cypress verify` gagal / binary tidak ditemukan | Download binary terputus | Jalankan `npx cypress install --force` |
-| Semua test timeout | Website lambat atau koneksi kantor memblokir | Coba buka https://baznas.go.id di Chrome. Naikkan `pageLoadTimeout` di `cypress.config.js` bila perlu |
+| Semua test timeout | Website lambat atau koneksi kantor memblokir | Coba buka https://baznas.go.id di Chrome. Naikkan `pageLoadTimeout` di `cypress.config.ts` bila perlu |
 | Error `cy.origin()` / "cross origin" | Navigasi ke `bayarzakat.baznas.go.id` tanpa `cy.origin` | Bungkus perintah setelah navigasi dengan `cy.origin('https://bayarzakat.baznas.go.id', () => { ... })` |
 | Test lulus di lokal tapi gagal di CI | Runner GitHub diblokir / lebih lambat | Lihat Sesi 2; pertimbangkan self-hosted runner |
 | `grepTags` tidak berpengaruh | Pakai `--env` (Cypress lama) | Cypress 16 memakai `--expose grepTags=...` |

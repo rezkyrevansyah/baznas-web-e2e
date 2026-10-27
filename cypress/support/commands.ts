@@ -1,17 +1,27 @@
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      typeNominal(value: number | string): Chainable<JQuery<HTMLElement>>
+      checkUrlStatus(url: string): Chainable<{ url: string; status: number }>
+      assertNoBrokenLinks(urls: string[], options?: { delayMs?: number }): Chainable<void>
+    }
+  }
+}
+
 /**
  * Mengubah teks nominal format Indonesia ("1.250.000" / "Rp 250.000") menjadi number.
  */
-export const toNumber = (text) => Number(String(text).replace(/[^0-9]/g, '')) || 0
+export const toNumber = (text: unknown): number => Number(String(text).replace(/[^0-9]/g, '')) || 0
 
 /**
  * Memformat number menjadi format ribuan Indonesia: 250000 -> "250.000".
  */
-export const formatRibuan = (num) => String(num).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+export const formatRibuan = (num: number | string): string => String(num).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 
 /**
  * Mengetik nominal ke field ber-mask: kosongkan dulu lalu ketik angka.
  */
-Cypress.Commands.add('typeNominal', { prevSubject: 'element' }, (subject, value) => {
+Cypress.Commands.add('typeNominal', { prevSubject: 'element' }, (subject, value: number | string) => {
   cy.wrap(subject).clear().type(String(value))
   // trigger blur agar handler keyup/change halaman dijalankan
   return cy.wrap(subject).blur()
@@ -21,7 +31,7 @@ Cypress.Commands.add('typeNominal', { prevSubject: 'element' }, (subject, value)
  * Request sebuah URL (tanpa membuka di browser) dan kembalikan status code.
  * failOnStatusCode=false supaya status 4xx/5xx bisa di-assert dan dilaporkan.
  */
-Cypress.Commands.add('checkUrlStatus', (url) => {
+Cypress.Commands.add('checkUrlStatus', (url: string) => {
   return cy
     .request({ url, failOnStatusCode: false, followRedirect: true, timeout: 30000 })
     .then((res) => ({ url, status: res.status }))
@@ -31,9 +41,9 @@ Cypress.Commands.add('checkUrlStatus', (url) => {
  * Cek sekumpulan URL dan gagal dengan daftar URL rusak (status >= 400).
  * Diberi jeda antar request supaya tidak membebani server.
  */
-Cypress.Commands.add('assertNoBrokenLinks', (urls, { delayMs = 300 } = {}) => {
-  const broken = []
-  cy.wrap(urls, { log: false }).each((url) => {
+Cypress.Commands.add('assertNoBrokenLinks', (urls: string[], { delayMs = 300 } = {}) => {
+  const broken: string[] = []
+  cy.wrap(urls, { log: false }).each((url: string) => {
     cy.checkUrlStatus(url).then(({ status }) => {
       if (status >= 400) broken.push(`${status} ${url}`)
     })

@@ -40,14 +40,14 @@ Modul yang sudah diotomasi pada Fase 1:
 
 | Modul | Halaman | Spec |
 |---|---|---|
-| Homepage | `/` | `home.cy.js` |
-| Header & menu navigasi | Menu hamburger | `navigation.cy.js` |
-| Bottom navigation | Quick menu bawah | `bottom-nav.cy.js` |
-| Kalkulator zakat | `/kalkulatorzakat` | `kalkulator-zakat.cy.js` |
-| Form bayar zakat | `bayarzakat.baznas.go.id/bayarzakat` | `bayar-zakat.cy.js` |
-| Form jemput zakat | `/form-jemput-zakat` | `jemput-zakat.cy.js` |
-| Rekening zakat | `/rekening` | `rekening.cy.js` |
-| Integritas link | Homepage & menu | `broken-links.cy.js` |
+| Homepage | `/` | `home.cy.ts` |
+| Header & menu navigasi | Menu hamburger | `navigation.cy.ts` |
+| Bottom navigation | Quick menu bawah | `bottom-nav.cy.ts` |
+| Kalkulator zakat | `/kalkulatorzakat` | `kalkulator-zakat.cy.ts` |
+| Form bayar zakat | `bayarzakat.baznas.go.id/bayarzakat` | `bayar-zakat.cy.ts` |
+| Form jemput zakat | `/form-jemput-zakat` | `jemput-zakat.cy.ts` |
+| Rekening zakat | `/rekening` | `rekening.cy.ts` |
+| Integritas link | Homepage & menu | `broken-links.cy.ts` |
 
 **Di luar cakupan:** transaksi pembayaran nyata, penyelesaian captcha, load/stress test, security test, serta isi situs pihak ketiga (PPID, bazn.as, media sosial). Untuk situs pihak ketiga, yang dicek hanya ketersediaan link-nya.
 
@@ -55,14 +55,14 @@ Modul yang sudah diotomasi pada Fase 1:
 
 Website yang diuji adalah sistem production yang menerima donasi. Karena itu suite ini mengikuti aturan berikut:
 
-1. **Tidak ada data yang terkirim.** Semua request tulis (`POST/PUT/PATCH/DELETE`) dari halaman diblokir oleh `cy.intercept` global di `cypress/support/e2e.js`. Endpoint sensitif seperti `submit_customer` dan `submit_jemput_zakat` juga di-stub di masing-masing spec.
+1. **Tidak ada data yang terkirim.** Semua request tulis (`POST/PUT/PATCH/DELETE`) dari halaman diblokir oleh `cy.intercept` global di `cypress/support/e2e.ts`. Endpoint sensitif seperti `submit_customer` dan `submit_jemput_zakat` juga di-stub di masing-masing spec.
 2. **Tidak ada transaksi.** Alur pembayaran berhenti sebelum metode pembayaran diproses.
 3. **Data dummy.** Semua input memakai data uji di `cypress/fixtures`, bukan data pribadi asli.
 4. **Beban minimal.** Test dijalankan saat push dan satu kali sehari. Pemeriksaan link memakai jeda antar request.
 
 ## Tech Stack
 
-- [Cypress](https://www.cypress.io/) 16 (JavaScript)
+- [Cypress](https://www.cypress.io/) 16 (TypeScript)
 - Page Object Model (`cypress/pages`)
 - [@cypress/grep](https://github.com/cypress-io/cypress/tree/develop/npm/grep) untuk menjalankan test berdasarkan tag
 - [cypress-mochawesome-reporter](https://github.com/LironEr/cypress-mochawesome-reporter) untuk report HTML
@@ -75,22 +75,24 @@ baznas-web-e2e/
 ├── .github/workflows/e2e.yml      # CI: push, PR, jadwal harian, manual
 ├── cypress/
 │   ├── e2e/                       # Spec test per modul
-│   │   ├── home.cy.js
-│   │   ├── navigation.cy.js
-│   │   ├── bottom-nav.cy.js
-│   │   ├── kalkulator-zakat.cy.js
-│   │   ├── bayar-zakat.cy.js
-│   │   ├── jemput-zakat.cy.js
-│   │   ├── rekening.cy.js
-│   │   └── broken-links.cy.js
+│   │   ├── home.cy.ts
+│   │   ├── navigation.cy.ts
+│   │   ├── bottom-nav.cy.ts
+│   │   ├── kalkulator-zakat.cy.ts
+│   │   ├── bayar-zakat.cy.ts
+│   │   ├── jemput-zakat.cy.ts
+│   │   ├── rekening.cy.ts
+│   │   └── broken-links.cy.ts
 │   ├── fixtures/                  # Data uji & nilai acuan (nisab, fidyah, menu, dll.)
 │   ├── pages/                     # Page Object
 │   └── support/
-│       ├── commands.js            # Custom command & helper
-│       └── e2e.js                 # Setup global (grep, reporter, blocker request tulis)
+│       ├── commands.ts            # Custom command & helper
+│       ├── e2e.ts                 # Setup global (grep, reporter, blocker request tulis)
+│       └── types.d.ts             # Deklarasi tipe untuk plugin tanpa types
 ├── docs/
 │   └── Test_Plan_Cypress_BAZNAS.xlsx
-├── cypress.config.js
+├── cypress.config.ts
+├── tsconfig.json
 └── package.json
 ```
 
@@ -114,8 +116,9 @@ npm ci
 | `npm run test:p1` | Semua test prioritas P1 kecuali `@known-bug` |
 | `npm run test:known-bug` | Hanya test untuk bug yang sudah diketahui |
 | `npm run test:links` | Hanya pemeriksaan broken link |
-| `npm run test:spec -- cypress/e2e/kalkulator-zakat.cy.js` | Menjalankan satu spec |
+| `npm run test:spec -- cypress/e2e/kalkulator-zakat.cy.ts` | Menjalankan satu spec |
 | `npm run test:chrome` | Menjalankan di browser Chrome |
+| `npm run typecheck` | Cek tipe TypeScript tanpa menjalankan test |
 
 ## Tag Test
 

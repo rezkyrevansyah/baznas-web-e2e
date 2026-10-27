@@ -1,10 +1,7 @@
 import home from '../pages/HomePage'
+import nav from '../fixtures/navigation.json'
 
 describe('Homepage', () => {
-  beforeEach(() => {
-    cy.fixture('navigation').as('nav')
-  })
-
   it('TC-HOME-001 | Homepage berhasil dimuat', { tags: ['@smoke', '@P1'] }, () => {
     cy.request('/').its('status').should('eq', 200)
     home.visit()
@@ -21,16 +18,16 @@ describe('Homepage', () => {
     cy.location('pathname').should('eq', '/')
   })
 
-  it('TC-HOME-004 | Kartu Zakat, Infak, Sedekah, Fidyah tampil', { tags: ['@smoke', '@P1'] }, function () {
+  it('TC-HOME-004 | Kartu Zakat, Infak, Sedekah, Fidyah tampil', { tags: ['@smoke', '@P1'] }, () => {
     home.visit()
-    home.zisCards().should('have.length', this.nav.homeCards.length)
-    this.nav.homeCards.forEach(({ title }) => {
+    home.zisCards().should('have.length', nav.homeCards.length)
+    nav.homeCards.forEach(({ title }) => {
       home.zisCards().contains(title).should('be.visible')
     })
   })
 
-  it("TC-HOME-005 | Tombol 'Selengkapnya' di setiap kartu mengarah ke halaman yang benar", { tags: ['@regression', '@P1'] }, function () {
-    this.nav.homeCards.forEach(({ path }) => {
+  it("TC-HOME-005 | Tombol 'Selengkapnya' di setiap kartu mengarah ke halaman yang benar", { tags: ['@regression', '@P1'] }, () => {
+    nav.homeCards.forEach(({ path }) => {
       home.visit()
       home.detailLink(path).should('contain.text', 'Selengkapnya').click()
       cy.location('pathname').should('eq', path)

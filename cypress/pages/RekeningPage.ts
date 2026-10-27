@@ -7,11 +7,11 @@ class RekeningPage {
     return cy.get('select#account_type')
   }
 
-  tabel(jenis) {
+  tabel(jenis: string) {
     return cy.get(`table#${jenis}`)
   }
 
-  barisRekening(jenis) {
+  barisRekening(jenis: string) {
     return this.tabel(jenis).find('tbody tr')
   }
 }

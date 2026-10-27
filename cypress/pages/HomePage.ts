@@ -4,14 +4,14 @@ class HomePage {
   }
 
   logo() {
-    return cy.get('img.brand-image').first()
+    return cy.get<HTMLImageElement>('img.brand-image').first()
   }
 
   zisCards() {
     return cy.get('.card.card-homepage')
   }
 
-  detailLink(path) {
+  detailLink(path: string) {
     return cy.get(`a.detail-card[href$="${path}"]`)
   }
 }

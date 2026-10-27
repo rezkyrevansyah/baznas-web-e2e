@@ -5,11 +5,11 @@ class JemputZakatPage {
   }
 
   form() {
-    return cy.get('form#formjemputzakat')
+    return cy.get<HTMLFormElement>('form#formjemputzakat')
   }
 
-  field(name) {
-    return this.form().find(`[name="${name}"]`)
+  field(name: string) {
+    return this.form().find<HTMLInputElement>(`[name="${name}"]`)
   }
 
   submitButton() {

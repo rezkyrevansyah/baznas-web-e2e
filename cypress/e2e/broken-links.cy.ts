@@ -4,8 +4,8 @@
  */
 const BASE = 'https://baznas.go.id'
 
-const collectInternalLinks = (selector) =>
-  cy.get(selector).then(($links) => {
+const collectInternalLinks = (selector: string) =>
+  cy.get<HTMLAnchorElement>(selector).then(($links) => {
     const urls = [...$links]
       .map((a) => a.href)
       .filter((href) => href.startsWith(BASE))

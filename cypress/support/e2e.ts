@@ -1,7 +1,7 @@
 import 'cypress-mochawesome-reporter/register'
+import { register as registerCypressGrep } from '@cypress/grep'
 import './commands'
 
-const { register: registerCypressGrep } = require('@cypress/grep')
 registerCypressGrep()
 
 // Error JavaScript dari script pihak ketiga (analytics, widget, dll.) tidak

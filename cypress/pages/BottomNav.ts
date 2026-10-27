@@ -6,7 +6,7 @@ class BottomNav {
     return cy.get('footer.main-footer')
   }
 
-  linkTo(href) {
+  linkTo(href: string) {
     return this.container().find(`a[href^="${href}"]`).first()
   }
 }

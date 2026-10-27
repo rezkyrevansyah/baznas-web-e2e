@@ -25,28 +25,28 @@ export const sel = {
 }
 
 class BayarZakatPage {
-  visit(url) {
+  visit(url: string) {
     cy.visit(url)
     cy.get(sel.jenisDana).should('be.visible')
   }
 
-  get(key) {
+  get(key: keyof typeof sel) {
     return cy.get(sel[key])
   }
 
   /**
    * Stub endpoint data muzaki agar tidak ada data yang terkirim ke server.
-   * (Lapisan pengaman tambahan di atas blocker global di support/e2e.js.)
+   * (Lapisan pengaman tambahan di atas blocker global di support/e2e.ts.)
    */
   stubSubmitCustomer() {
     cy.intercept('POST', '**/pembayaran/submit_customer', { statusCode: 200, body: {} }).as('submitCustomer')
   }
 
-  pilihJenisDana(value) {
+  pilihJenisDana(value: string) {
     this.get('jenisDana').select(value)
   }
 
-  isiNominal(value) {
+  isiNominal(value: number | string) {
     this.get('nominal').clear().type(String(value))
   }
 

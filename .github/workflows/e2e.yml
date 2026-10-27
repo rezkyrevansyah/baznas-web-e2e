@@ -34,9 +34,16 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Run Cypress
         uses: cypress-io/github-action@v6
         with:
+          install: false
           browser: chrome
           command: npx cypress run --browser chrome --expose grepTags=${{ github.event.inputs.grepTags || '-@known-bug' }}
 

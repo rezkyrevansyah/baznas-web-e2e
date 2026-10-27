@@ -4,6 +4,7 @@
   "description": "End-to-end test automation untuk website publik BAZNAS RI (baznas.go.id) menggunakan Cypress",
   "scripts": {
     "cy:open": "cypress open",
+    "typecheck": "tsc --noEmit",
     "test": "cypress run",
     "test:smoke": "cypress run --expose grepTags=@smoke,grepFilterSpecs=true",
     "test:p1": "cypress run --expose grepTags=@P1+-@known-bug",
@@ -24,8 +25,10 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "@cypress/grep": "^7.0.0",
+    "@types/node": "^26.6.5",
     "cypress": "^16.2.0",
-    "cypress-mochawesome-reporter": "^5.0.0"
+    "cypress-mochawesome-reporter": "^5.0.0",
+    "typescript": "^7.0.2"
   },
   "private": true,
   "engines": {

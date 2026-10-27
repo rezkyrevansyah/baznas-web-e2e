@@ -1,7 +1,8 @@
-const { defineConfig } = require('cypress')
-const { plugin: cypressGrepPlugin } = require('@cypress/grep/plugin')
+import { defineConfig } from 'cypress'
+import { plugin as cypressGrepPlugin } from '@cypress/grep/plugin'
+import mochawesomePlugin from 'cypress-mochawesome-reporter/plugin'
 
-module.exports = defineConfig({
+export default defineConfig({
   projectId: undefined,
   reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
@@ -20,7 +21,7 @@ module.exports = defineConfig({
   },
   e2e: {
     baseUrl: 'https://baznas.go.id',
-    specPattern: 'cypress/e2e/**/*.cy.js',
+    specPattern: 'cypress/e2e/**/*.cy.ts',
     viewportWidth: 1366,
     viewportHeight: 768,
     defaultCommandTimeout: 15000,
@@ -31,7 +32,7 @@ module.exports = defineConfig({
     video: false,
     screenshotOnRunFailure: true,
     setupNodeEvents(on, config) {
-      require('cypress-mochawesome-reporter/plugin')(on)
+      mochawesomePlugin(on)
       cypressGrepPlugin(config)
       return config
     },

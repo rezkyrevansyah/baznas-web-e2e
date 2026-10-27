@@ -1,23 +1,16 @@
 import kalkulator from '../pages/KalkulatorZakatPage'
 import { toNumber, formatRibuan } from '../support/commands'
+import zakat from '../fixtures/zakat.json'
 
 describe('Kalkulator Zakat – Penghasilan', () => {
-  let zakat
-
-  before(() => {
-    cy.fixture('zakat').then((data) => {
-      zakat = data
-    })
-  })
-
   beforeEach(() => {
     kalkulator.visit()
   })
 
   /** Zakat yang diharapkan: 2,5% dibulatkan ke atas (sesuai perilaku kalkulator). */
-  const expectedZakat = (penghasilan) => Math.ceil(penghasilan * zakat.tarifZakat)
+  const expectedZakat = (penghasilan: number) => Math.ceil(penghasilan * zakat.tarifZakat)
 
-  const assertZakat = (nominal) => {
+  const assertZakat = (nominal: number) => {
     kalkulator.hasilZakat().should('be.visible')
     kalkulator.totalZakat().should('have.value', formatRibuan(nominal))
   }
@@ -87,7 +80,7 @@ describe('Kalkulator Zakat – Penghasilan', () => {
     kalkulator.hitung()
     assertZakat(262500)
     kalkulator.reset()
-    ;['gaji', 'penghasilanLain', 'jumlahPenghasilan', 'totalZakat'].forEach((field) => {
+    ;(['gaji', 'penghasilanLain', 'jumlahPenghasilan', 'totalZakat'] as const).forEach((field) => {
       kalkulator[field]().invoke('val').then((val) => expect(toNumber(val), field).to.eq(0))
     })
     kalkulator.button('Hitung Zakat').should('be.visible')

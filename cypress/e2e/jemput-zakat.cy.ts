@@ -1,18 +1,11 @@
 import jemput from '../pages/JemputZakatPage'
+import data from '../fixtures/jemput-zakat.json'
 
 /**
  * Form Jemput Zakat – hanya validasi sisi klien. Form tidak pernah benar-benar
  * terkirim: verifikasi captcha di-stub "false" dan endpoint submit diblokir.
  */
 describe('Form Jemput Zakat – Validasi', () => {
-  let data
-
-  before(() => {
-    cy.fixture('jemput-zakat').then((fx) => {
-      data = fx
-    })
-  })
-
   beforeEach(() => {
     cy.intercept('POST', '**/verifycaptcha.php', { statusCode: 200, body: 'false' }).as('verifyCaptcha')
     cy.intercept('POST', '**/submit_jemput_zakat', { statusCode: 204, body: '' }).as('submitJemput')
