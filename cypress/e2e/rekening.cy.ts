@@ -6,7 +6,8 @@ describe('Rekening Zakat', () => {
     cy.request('/rekening').its('status').should('eq', 200)
     rekening.visit()
     cy.title().should('contain', 'Rekening Zakat BAZNAS')
-    cy.contains('Daftar Rekening').should('be.visible')
+    // Di DOM tertulis "daftar rekening"; huruf kapital hanya dari CSS text-capitalize.
+    cy.contains('h4', 'daftar rekening', { matchCase: false }).should('be.visible')
   })
 
   it('TC-REK-002 | Daftar rekening bank tampil lengkap', { tags: ['@regression', '@P1'] }, () => {

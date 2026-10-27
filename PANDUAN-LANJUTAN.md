@@ -18,12 +18,12 @@ Dokumen ini dibagi menjadi 4 bagian:
 | Item | Status |
 |---|---|
 | Test plan (22 modul, 34 skenario, 112 test case) | Selesai, ada di `docs/Test_Plan_Cypress_BAZNAS.xlsx` |
-| Struktur project, Page Object, fixtures, report, CI | Selesai |
-| Fase 1: 41 test case P1 + smoke (42 test, 8 spec) | Sudah ditulis, **belum pernah dijalankan** ke website asli |
+| Struktur project, Page Object, fixtures, report, CI | Selesai (TypeScript `strict`) |
+| Fase 1: 41 test case P1 + smoke (42 test, 8 spec) | **Stabil** (Sesi 1, 27 Okt 2026): `npm test` 39/39 hijau 2× berturut-turut; 3 test `@known-bug` gagal sesuai temuan F-01, F-12, F-15 |
 | Fase 2: 71 test case P2/P3 | Belum dibuat (Batch A–D) |
 | Finishing (lint, report online, notifikasi, laporan) | Belum |
 
-> Kode Fase 1 ditulis berdasarkan inspeksi DOM website pada 27 Oktober 2026, tetapi belum pernah dieksekusi. Karena itu langkah pertama **wajib** menjalankan dan menstabilkan Fase 1.
+> Pada Sesi 1, F-14 terverifikasi sudah diperbaiki di situs sehingga TC-PAY-012..014 tidak lagi bertag `@known-bug`. Jumlah test known-bug sekarang 3, bukan 6.
 
 ---
 
@@ -399,7 +399,7 @@ Verifikasi ulang dengan `curl -sL <url>` sebelum dipakai, karena website bisa be
 | Fidyah | `#hariid` (opsi 0 = placeholder, 1–30), nominal otomatis 65.000 × hari, `#nominal` readonly |
 | Data muzaki | `#nominal` (required, maxlength 50), `#name` (hanya `[a-zA-Z .,]` via `validateNameInput`), `input[name=user_title]` Bapak/Ibu, `#handphone` (maxlength 13), `#email`, `#cookies` |
 | Validasi | jQuery Validate. Rules: user_name required; user_phone required minlength 8; email required + emailStrict; nominal required. Pesan error di `label#<id>-error.error`, misalnya `label#nominal-error` "Mohon Masukkan Nominal Donasi" |
-| Alur | `#next-button` ("Pilih Pembayaran") → `hitToReleva()` (tracking) + AJAX `POST /pembayaran/submit_customer` → layar "Metode Pembayaran" dengan `#pay-button`. Hanya nominal yang tervalidasi pada langkah ini (F-14) |
+| Alur | `#next-button` ("Pilih Pembayaran") → `hitToReleva()` (tracking) + AJAX `POST /pembayaran/submit_customer` → layar "Metode Pembayaran" dengan `#pay-button`. `next_step()` menjalankan validasi seluruh field (F-14 sudah diperbaiki, diverifikasi 27 Okt 2026) |
 | Metode | `input[name=metode]`: bsi, bca, mandiri, bni, bri, cimb, muamalat, permata, qris, blu, gopay, shopee, ovo, dana, jenius, linkaja, indomaret, credit, paypal |
 | Kalkulator (tab 2) | Input `pendapatan`, `lainnya`, `emasperak`, `tabungan`, `kendaraan`, `hutang`; tombol Reset / Hitung / Hitung Ulang / Bayar / Bayar Zakat Maal / Sedekah; fungsi `hitungpenghasilan()`, `resetpenghasilan()`, `ulangpenghasilan()`, `bayarpenghasilan()`; zakat fitrah 40.000 × jiwa (`hitungfitrah`) |
 
@@ -477,7 +477,7 @@ Jika Python tidak tersedia, tuliskan perubahan yang perlu dilakukan dalam bentuk
 | F-11 | Halaman 404 tanpa title | Low | TC-ERR-001 |
 | F-12 | Nominal/jenis dari kalkulator hilang di form pembayaran | Medium | TC-CALC-015b (@known-bug) |
 | F-13 | Typo pesan validasi email "engiriman" | Low | – |
-| F-14 | Form bayar lanjut tanpa validasi nama/HP/email | Medium | TC-PAY-012..014 (@known-bug) |
+| F-14 | Form bayar lanjut tanpa validasi nama/HP/email — **sudah diperbaiki** (diverifikasi 27 Okt 2026) | Medium | TC-PAY-012..014 (tag @known-bug dilepas) |
 | F-15 | Tidak ada validasi minimal Rp1.000.000 di jemput zakat (klien) | Low | TC-JMP-007 (@known-bug) |
 | F-16 | Field "Jumlah penghasilan" bisa diedit manual | Low | – |
 
@@ -967,7 +967,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
 
 ## Bagian 6 – Checklist Project Selesai
 
-- [ ] Sesi 1: Fase 1 stabil (hijau 2× berturut-turut)
+- [x] Sesi 1: Fase 1 stabil (hijau 2× berturut-turut)
 - [ ] Sesi 2: repo publik di GitHub, workflow CI aktif dan hijau
 - [ ] Sesi 3: Batch A selesai (28 TC)
 - [ ] Sesi 4: Batch B selesai (16 TC)

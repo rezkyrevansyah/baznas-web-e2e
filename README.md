@@ -162,7 +162,7 @@ Setiap test diberi ID sesuai test plan, misalnya `TC-CALC-003 | ...`, dan tag be
 | TC-PAY-007 / 008 | Perhitungan nominal fidyah otomatis | regression |
 | TC-PAY-010 | Field data muzaki tampil | regression |
 | TC-PAY-011 | Nominal kosong tidak bisa diproses | negative |
-| TC-PAY-012..014 | Validasi nama, email, nomor HP | known-bug |
+| TC-PAY-012..014 | Validasi nama, email, nomor HP | negative |
 | TC-PAY-017 | Daftar metode pembayaran lengkap | regression |
 | TC-JMP-004 / 005 | Validasi field wajib dan format email | negative |
 | TC-JMP-007 | Nominal di bawah minimum Rp1.000.000 | known-bug |
@@ -177,7 +177,6 @@ Detail lengkap ada di sheet **Temuan Eksplorasi** pada test plan. Temuan yang me
 |---|---|---|
 | F-01 | Hasil kalkulator tidak dihitung ulang saat input diubah setelah klik Hitung | TC-CALC-014 |
 | F-12 | Jenis dana dan nominal dari kalkulator tidak terbawa ke form pembayaran | TC-CALC-015b |
-| F-14 | Form bayar zakat lanjut ke metode pembayaran walaupun data muzaki kosong/tidak valid | TC-PAY-012..014 |
 | F-15 | Tidak ada validasi nominal minimum pada form jemput zakat di sisi klien | TC-JMP-007 |
 
 Setelah perbaikan dirilis, jalankan `npm run test:known-bug`. Test yang sudah lulus bisa dilepas dari tag `@known-bug`.

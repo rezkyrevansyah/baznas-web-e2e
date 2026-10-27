@@ -72,8 +72,9 @@ describe('Form Bayar Zakat Online', () => {
     })
     ;(['nama', 'handphone', 'email'] as const).forEach((key) => bayar.get(key).should('be.visible'))
     bayar.get('persetujuan').should('exist')
-    // nama hanya menerima huruf, spasi, titik dan koma
-    bayar.get('nama').type('Pengujian 123 Otomatis').should('have.value', 'Pengujian  Otomatis')
+    // nama hanya menerima huruf, spasi, titik dan koma (difilter saat onchange/blur)
+    bayar.get('nama').type('Pengujian 123 Otomatis').blur()
+    bayar.get('nama').should('have.value', 'Pengujian  Otomatis')
   })
 
   it('TC-PAY-011 | Nominal kosong tidak bisa diproses', { tags: ['@regression', '@P1', '@negative'] }, () => {
@@ -84,10 +85,9 @@ describe('Form Bayar Zakat Online', () => {
     assertSubmitTidakTerkirim()
   })
 
-  // Temuan F-14: dengan nominal terisi, form langsung lanjut ke pemilihan metode
-  // pembayaran walaupun nama / HP / email kosong atau tidak valid. Aturan
-  // validasinya ada di halaman, tetapi belum dijalankan pada langkah ini.
-  it('TC-PAY-012 | Nama lengkap wajib diisi', { tags: ['@regression', '@P1', '@negative', '@known-bug'] }, () => {
+  // Temuan F-14 (form lanjut tanpa validasi nama/HP/email) sudah diperbaiki di situs;
+  // diverifikasi 27 Okt 2026: next_step() kini menjalankan validasi seluruh field.
+  it('TC-PAY-012 | Nama lengkap wajib diisi', { tags: ['@regression', '@P1', '@negative'] }, () => {
     bayar.isiNominal(data.dataDummy.nominal)
     bayar.get('nama').clear()
     bayar.get('handphone').type(data.dataDummy.handphone)
@@ -98,7 +98,7 @@ describe('Form Bayar Zakat Online', () => {
     assertSubmitTidakTerkirim()
   })
 
-  it('TC-PAY-013 | Format email tidak valid ditolak', { tags: ['@regression', '@P1', '@negative', '@known-bug'] }, () => {
+  it('TC-PAY-013 | Format email tidak valid ditolak', { tags: ['@regression', '@P1', '@negative'] }, () => {
     bayar.isiNominal(data.dataDummy.nominal)
     bayar.get('nama').type(data.dataDummy.nama)
     bayar.get('handphone').type(data.dataDummy.handphone)
@@ -109,7 +109,7 @@ describe('Form Bayar Zakat Online', () => {
     assertSubmitTidakTerkirim()
   })
 
-  it('TC-PAY-014 | Nomor HP tidak valid ditolak', { tags: ['@regression', '@P1', '@negative', '@known-bug'] }, () => {
+  it('TC-PAY-014 | Nomor HP tidak valid ditolak', { tags: ['@regression', '@P1', '@negative'] }, () => {
     bayar.isiNominal(data.dataDummy.nominal)
     bayar.get('nama').type(data.dataDummy.nama)
     bayar.get('handphone').type('123')
