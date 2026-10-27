@@ -1,0 +1,10 @@
+{
+  "sumberNisab": "SK Ketua BAZNAS No. 15 tahun 2026",
+  "nisabPerTahun": 91681728,
+  "nisabPerBulan": 7640114,
+  "tarifZakat": 0.025,
+  "fidyahPerHari": 65000,
+  "fidyahMaksHari": 30,
+  "jenisKalkulator": ["PENGHASILAN", "PERUSAHAAN", "PERDAGANGAN", "EMAS"],
+  "pesanBelumNisab": "Penghasilan Anda belum mencapai Nisab"
+}

@@ -1,0 +1,34 @@
+{
+  "name": "baznas-web-e2e",
+  "version": "1.0.0",
+  "description": "End-to-end test automation untuk website publik BAZNAS RI (baznas.go.id) menggunakan Cypress",
+  "scripts": {
+    "cy:open": "cypress open",
+    "test": "cypress run",
+    "test:smoke": "cypress run --expose grepTags=@smoke,grepFilterSpecs=true",
+    "test:p1": "cypress run --expose grepTags=@P1+-@known-bug",
+    "test:known-bug": "cypress run --expose grepTags=@known-bug,grepFilterSpecs=true",
+    "test:links": "cypress run --expose grepTags=@links,grepFilterSpecs=true",
+    "test:spec": "cypress run --spec",
+    "test:chrome": "cypress run --browser chrome",
+    "clean:reports": "rm -rf cypress/reports cypress/screenshots cypress/videos"
+  },
+  "keywords": [
+    "cypress",
+    "e2e",
+    "test-automation",
+    "qa",
+    "baznas"
+  ],
+  "author": "Revan",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@cypress/grep": "^7.0.0",
+    "cypress": "^16.2.0",
+    "cypress-mochawesome-reporter": "^5.0.0"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}

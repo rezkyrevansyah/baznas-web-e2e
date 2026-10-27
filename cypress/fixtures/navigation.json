@@ -1,0 +1,16 @@
+{
+  "homeCards": [
+    { "title": "Zakat", "path": "/zakat" },
+    { "title": "Infak", "path": "/infak" },
+    { "title": "Sedekah", "path": "/sedekah" },
+    { "title": "Fidyah", "path": "/fidyah" }
+  ],
+  "bottomNav": [
+    { "label": "PPID", "href": "https://ppid.baznas.go.id" },
+    { "label": "Layanan Mustahik", "href": "https://bazn.as/LayananMustahik" },
+    { "label": "Bayar Zakat", "href": "https://baznas.go.id/bayarzakat" },
+    { "label": "Konfirmasi Zakat", "href": "https://baznas.go.id/konfirmasi-zis" },
+    { "label": "Transfer Zakat", "href": "https://baznas.go.id/rekening" }
+  ],
+  "bottomNavPages": ["/", "/zakat", "/kalkulatorzakat", "/rekening"]
+}

@@ -1,0 +1,20 @@
+{
+  "minimalNominal": 1000000,
+  "dataDummy": {
+    "nama": "Pengujian Otomatis",
+    "hp": "081200000000",
+    "email": "qa.automation@example.com",
+    "alamat": "Alamat dummy untuk pengujian otomatis",
+    "jam": "10:00"
+  },
+  "requiredFields": [
+    "nama",
+    "hp",
+    "email",
+    "tanggal_jemput",
+    "jam_jemput",
+    "nominal",
+    "alamat",
+    "captcha_code"
+  ]
+}

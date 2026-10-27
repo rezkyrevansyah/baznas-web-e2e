@@ -1,0 +1,38 @@
+{
+  "topLevel": [
+    "beranda", "tentang baznas", "profil program", "panduan brand", "zakat", "layanan",
+    "kabar", "laporan", "ppid", "pustaka", "baznas daerah", "jaringan", "kontak baznas"
+  ],
+  "tentangBaznas": [
+    { "label": "Profil BAZNAS", "path": "/baznas-profile" },
+    { "label": "Struktur BAZNAS", "path": "/struktur-baznas" },
+    { "label": "Penghargaan", "path": "/penghargaan" },
+    { "label": "Mitra BAZNAS", "path": "/mitra-baznas" },
+    { "label": "Pemberitahuan", "path": "/pemberitahuan" },
+    { "label": "Karir", "path": "/karir" }
+  ],
+  "zakat": [
+    { "label": "Tentang Zakat", "path": "/zakat" },
+    { "label": "Zakat Fitrah", "path": "/zakatfitrah" },
+    { "label": "Tentang Zakat Mal", "path": "/zakatmal" },
+    { "label": "Penghasilan", "path": "/zakatpenghasilan" },
+    { "label": "Perusahaan", "path": "/zakatperusahaan" },
+    { "label": "Perdagangan", "path": "/zakatperdagangan" },
+    { "label": "Emas", "path": "/zakatemas" },
+    { "label": "Saham", "path": "/zakatsaham" },
+    { "label": "Infak", "path": "/infak" },
+    { "label": "Sedekah", "path": "/sedekah" },
+    { "label": "Fidyah", "path": "/fidyah" }
+  ],
+  "layanan": [
+    { "label": "UPZ", "path": "/upz" },
+    { "label": "Zakat Karyawan", "path": "/zakat-karyawan" },
+    { "label": "Register Label Taat Zakat", "path": "/register-label-taat-zakat" },
+    { "label": "Konfirmasi ZIS", "path": "https://bazn.as/Konfirmasi" },
+    { "label": "Kurban Online", "path": "/kurban-online" },
+    { "label": "Kalkulator Zakat", "path": "/kalkulatorzakat" },
+    { "label": "Info Rekening Zakat", "path": "/rekening" },
+    { "label": "Layanan Pembayaran", "path": "/layananpembayaran" },
+    { "label": "Jemput Zakat", "path": "/form-jemput-zakat" }
+  ]
+}

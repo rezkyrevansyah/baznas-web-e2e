@@ -1,0 +1,57 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Setiap hari pukul 08:00 WIB (01:00 UTC)
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    inputs:
+      grepTags:
+        description: 'Tag yang dijalankan (contoh: @smoke, @P1+-@known-bug, @known-bug)'
+        required: false
+        default: '-@known-bug'
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cypress:
+    name: Cypress (Chrome)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          command: npx cypress run --browser chrome --expose grepTags=${{ github.event.inputs.grepTags || '-@known-bug' }}
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-report-${{ github.run_number }}
+          path: cypress/reports
+          retention-days: 14
+
+      - name: Upload screenshots (jika gagal)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots-${{ github.run_number }}
+          path: cypress/screenshots
+          retention-days: 14

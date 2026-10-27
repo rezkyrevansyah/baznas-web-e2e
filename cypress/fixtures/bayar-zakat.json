@@ -1,0 +1,38 @@
+{
+  "url": "https://bayarzakat.baznas.go.id/bayarzakat",
+  "origin": "https://bayarzakat.baznas.go.id",
+  "jenisDana": [
+    { "value": "zakat", "label": "Zakat" },
+    { "value": "infak", "label": "Infak" },
+    { "value": "sedekah", "label": "Sedekah" },
+    { "value": "fidyah", "label": "Fidyah" }
+  ],
+  "subJenisZakat": [
+    "Zakat Mal Pendapatan dan Jasa",
+    "Zakat Mal",
+    "Zakat Mal Emas, Perak, dan Logam Mulia Lainnya",
+    "Zakat Mal Uang dan Surat Berharga Lainnya",
+    "Zakat Mal Perniagaan",
+    "Zakat Mal Pertanian, Perkebunan, dan Kehutanan",
+    "Zakat Mal Peternakan dan Perikanan",
+    "Zakat Mal Pertambangan",
+    "Zakat Mal Perindustrian",
+    "Zakat Mal Rikaz"
+  ],
+  "metodePembayaran": [
+    "bsi", "bca", "mandiri", "bni", "bri", "cimb", "muamalat", "permata", "qris", "blu",
+    "gopay", "shopee", "ovo", "dana", "jenius", "linkaja", "indomaret", "credit", "paypal"
+  ],
+  "pesanValidasi": {
+    "nominal": "Mohon Masukkan Nominal Donasi",
+    "nama": "Mohon Masukkan Nama",
+    "handphone": "Mohon Masukkan Nomor Handphone",
+    "email": "Mohon Masukkan Email yang valid"
+  },
+  "dataDummy": {
+    "nama": "Pengujian Otomatis",
+    "handphone": "081200000000",
+    "email": "qa.automation@example.com",
+    "nominal": 50000
+  }
+}
