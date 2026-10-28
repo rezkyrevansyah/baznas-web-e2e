@@ -1,6 +1,6 @@
 # BAZNAS Web E2E
 
-[![E2E Tests](https://github.com/<username>/baznas-web-e2e/actions/workflows/e2e.yml/badge.svg)](https://github.com/<username>/baznas-web-e2e/actions/workflows/e2e.yml)
+[![E2E Tests](https://github.com/rezkyrevansyah/baznas-web-e2e/actions/workflows/e2e.yml/badge.svg)](https://github.com/rezkyrevansyah/baznas-web-e2e/actions/workflows/e2e.yml)
 
 Test automation end-to-end (E2E) dengan **Cypress** untuk website publik **BAZNAS RI** – [baznas.go.id](https://baznas.go.id), termasuk form pembayaran ZIS di [bayarzakat.baznas.go.id](https://bayarzakat.baznas.go.id/bayarzakat).
 
@@ -101,7 +101,7 @@ baznas-web-e2e/
 Prasyarat: Node.js 20 atau lebih baru.
 
 ```bash
-git clone https://github.com/<username>/baznas-web-e2e.git
+git clone https://github.com/rezkyrevansyah/baznas-web-e2e.git
 cd baznas-web-e2e
 npm ci
 ```

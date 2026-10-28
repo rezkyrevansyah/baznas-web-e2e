@@ -968,7 +968,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
 ## Bagian 6 – Checklist Project Selesai
 
 - [x] Sesi 1: Fase 1 stabil (hijau 2× berturut-turut)
-- [ ] Sesi 2: repo publik di GitHub, workflow CI aktif dan hijau
+- [x] Sesi 2: repo publik di GitHub, workflow CI aktif dan hijau
 - [ ] Sesi 3: Batch A selesai (28 TC)
 - [ ] Sesi 4: Batch B selesai (16 TC)
 - [ ] Sesi 5: Batch C selesai (14 TC)
