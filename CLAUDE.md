@@ -13,7 +13,7 @@ Test automation E2E Cypress untuk website publik BAZNAS RI (https://baznas.go.id
 - **Konten repo:** jangan menulis bahwa project ini adalah portfolio, latihan, atau demo. Jangan menyertakan data pribadi atau kredensial.
 - **Bahasa Indonesia** untuk README, dokumen, komentar, dan judul test.
 - **Test plan adalah sumber kebenaran:** `docs/Test_Plan_Cypress_BAZNAS.xlsx`. Judul test `'<TC-ID> | <judul>'` harus cocok dengan sheet Test Case.
-- **Bug website:** pertahankan expected result yang benar, beri tag `@known-bug` dan komentar `// Temuan F-xx`, lalu catat di sheet Temuan Eksplorasi. ID temuan baru dimulai dari F-17.
+- **Bug website:** pertahankan expected result yang benar, beri tag `@known-bug` dan komentar `// Temuan F-xx`, lalu catat di sheet Temuan Eksplorasi. ID temuan baru dimulai dari F-21.
 - **Jangan menebak selector.** Verifikasi dari HTML asli (`curl -sL <url>`) atau Cypress App.
 - Minta konfirmasi pengguna sebelum `git push` atau menghapus file.
 

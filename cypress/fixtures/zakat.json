@@ -6,5 +6,7 @@
   "fidyahPerHari": 65000,
   "fidyahMaksHari": 30,
   "jenisKalkulator": ["PENGHASILAN", "PERUSAHAAN", "PERDAGANGAN", "EMAS"],
-  "pesanBelumNisab": "Penghasilan Anda belum mencapai Nisab"
+  "jenisKalkulatorValue": ["penghasilan", "perusahaan", "perdagangan", "emas_perak"],
+  "pesanBelumNisab": "Penghasilan Anda belum mencapai Nisab",
+  "pesanBelumNisabHarta": "Harta Anda belum masuk nishab"
 }

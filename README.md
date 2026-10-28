@@ -17,7 +17,7 @@ Suite ini adalah regression test dan monitoring harian. Fokusnya pada fitur yang
 - [Instalasi](#instalasi)
 - [Menjalankan Test](#menjalankan-test)
 - [Tag Test](#tag-test)
-- [Daftar Test Case (Fase 1)](#daftar-test-case-fase-1)
+- [Daftar Test Case](#daftar-test-case)
 - [Known Issues](#known-issues)
 - [Report & CI/CD](#report--cicd)
 - [Pemeliharaan Data Uji](#pemeliharaan-data-uji)
@@ -34,18 +34,20 @@ Test plan lengkap ada di [`docs/Test_Plan_Cypress_BAZNAS.xlsx`](docs/Test_Plan_C
 | Modul | 22 |
 | Test scenario | 34 |
 | Test case | 112 |
-| Diotomasi (Fase 1: P1 + smoke) | 41 test case |
+| Diotomasi | 69 test case (Fase 1: 41, Fase 2 Batch A: 28) |
 
-Modul yang sudah diotomasi pada Fase 1:
+Modul yang sudah diotomasi:
 
 | Modul | Halaman | Spec |
 |---|---|---|
 | Homepage | `/` | `home.cy.ts` |
 | Header & menu navigasi | Menu hamburger | `navigation.cy.ts` |
 | Bottom navigation | Quick menu bawah | `bottom-nav.cy.ts` |
-| Kalkulator zakat | `/kalkulatorzakat` | `kalkulator-zakat.cy.ts` |
-| Form bayar zakat | `bayarzakat.baznas.go.id/bayarzakat` | `bayar-zakat.cy.ts` |
+| Kalkulator zakat | `/kalkulatorzakat` (penghasilan, perusahaan, perdagangan, emas) | `kalkulator-zakat.cy.ts` |
+| Form bayar zakat | `bayarzakat.baznas.go.id/bayarzakat` (formulir & tab Kalkulator) | `bayar-zakat.cy.ts` |
 | Form jemput zakat | `/form-jemput-zakat` | `jemput-zakat.cy.ts` |
+| Konfirmasi ZIS | `/konfirmasi-zis` | `konfirmasi-zis.cy.ts` |
+| Subscribe newsletter | Form "Dapatkan Update Berita" | `newsletter.cy.ts` |
 | Rekening zakat | `/rekening` | `rekening.cy.ts` |
 | Integritas link | Homepage & menu | `broken-links.cy.ts` |
 
@@ -55,7 +57,7 @@ Modul yang sudah diotomasi pada Fase 1:
 
 Website yang diuji adalah sistem production yang menerima donasi. Karena itu suite ini mengikuti aturan berikut:
 
-1. **Tidak ada data yang terkirim.** Semua request tulis (`POST/PUT/PATCH/DELETE`) dari halaman diblokir oleh `cy.intercept` global di `cypress/support/e2e.ts`. Endpoint sensitif seperti `submit_customer` dan `submit_jemput_zakat` juga di-stub di masing-masing spec.
+1. **Tidak ada data yang terkirim.** Semua request tulis (`POST/PUT/PATCH/DELETE`) dari halaman diblokir oleh `cy.intercept` global di `cypress/support/e2e.ts`. Endpoint sensitif seperti `submit_customer` dan `submit_jemput_zakat` juga di-stub di masing-masing spec. Pada test newsletter, request ke Mailchimp di-stub dan submit form dicegah.
 2. **Tidak ada transaksi.** Alur pembayaran berhenti sebelum metode pembayaran diproses.
 3. **Data dummy.** Semua input memakai data uji di `cypress/fixtures`, bukan data pribadi asli.
 4. **Beban minimal.** Test dijalankan saat push dan satu kali sehari. Pemeriksaan link memakai jeda antar request.
@@ -81,6 +83,8 @@ baznas-web-e2e/
 │   │   ├── kalkulator-zakat.cy.ts
 │   │   ├── bayar-zakat.cy.ts
 │   │   ├── jemput-zakat.cy.ts
+│   │   ├── konfirmasi-zis.cy.ts
+│   │   ├── newsletter.cy.ts
 │   │   ├── rekening.cy.ts
 │   │   └── broken-links.cy.ts
 │   ├── fixtures/                  # Data uji & nilai acuan (nisab, fidyah, menu, dll.)
@@ -128,12 +132,14 @@ Setiap test diberi ID sesuai test plan, misalnya `TC-CALC-003 | ...`, dan tag be
 |---|---|
 | `@smoke` | Cek cepat fungsi utama |
 | `@regression` | Regression lengkap |
-| `@P1` | Prioritas kritikal |
+| `@P1` / `@P2` / `@P3` | Prioritas kritikal / penting / pelengkap |
 | `@negative` / `@boundary` | Negative test dan boundary value |
 | `@links` | Pemeriksaan link |
 | `@known-bug` | Test untuk bug yang sudah ditemukan. Tidak dijalankan secara default agar pipeline tetap hijau, tetapi bug tetap terdokumentasi dan bisa diverifikasi setelah perbaikan |
 
-## Daftar Test Case (Fase 1)
+## Daftar Test Case
+
+### Fase 1 (P1 + smoke)
 
 | ID | Test Case | Tag |
 |---|---|---|
@@ -169,6 +175,32 @@ Setiap test diberi ID sesuai test plan, misalnya `TC-CALC-003 | ...`, dan tag be
 | TC-REK-001 / 002 | Halaman dan daftar rekening | smoke, regression |
 | TC-LINK-001 / 002 | Tidak ada broken link di homepage dan menu | regression |
 
+### Fase 2 – Batch A (form & kalkulator)
+
+| ID | Test Case | Tag |
+|---|---|---|
+| TC-CALC-008 | Nominal besar diformat dan dihitung dengan benar | boundary |
+| TC-CALC-010 | Input karakter spesial & minus ditolak | known-bug |
+| TC-CALC-011 / 012 | Hitung dengan field kosong; field hasil tidak dapat diedit | negative |
+| TC-CALC-016 | Tombol "Sedekah" di bawah nisab membawa ke form sedekah | regression |
+| TC-CALC-017 | Dropdown jenis zakat berisi 4 jenis | regression |
+| TC-CALC-018..020 | Kalkulator zakat perusahaan, perdagangan, emas | regression |
+| TC-CALC-021 | Zakat emas di bawah 85 gram | boundary |
+| TC-PAY-004 / 005 | Sub-jenis Infak dan Sedekah | regression |
+| TC-PAY-006 | Nominal tidak terbawa saat berganti jenis dana | known-bug |
+| TC-PAY-009 | Pilihan jumlah hari fidyah 1–30 | boundary |
+| TC-PAY-015 | Nominal nol ditolak (metode pembayaran dinonaktifkan) | boundary |
+| TC-PAY-016 | Teks pernyataan muzaki & checkbox | regression |
+| TC-PAY-018 | Logo metode pembayaran ter-load | regression |
+| TC-PAY-019 / 020 | Tab Kalkulator: zakat penghasilan dan zakat maal | regression |
+| TC-JMP-001 / 002 | Form jemput zakat lengkap; opsi jenis & metode | regression |
+| TC-JMP-003 | Captcha tampil dan dapat di-refresh | known-bug |
+| TC-JMP-006 | Nomor HP berisi huruf ditolak | negative |
+| TC-JMP-008 | Tanggal penjemputan di masa lalu | known-bug |
+| TC-KONF-001 | Halaman konfirmasi ZIS tampil | known-bug |
+| TC-KONF-002 | Tombol "Konfirmasi Sekarang" mengarah ke form konfirmasi | regression |
+| TC-NWSL-001 / 002 | Email kosong / tidak valid tidak dapat di-subscribe | negative |
+
 ## Known Issues
 
 Detail lengkap ada di sheet **Temuan Eksplorasi** pada test plan. Temuan yang memiliki test otomatis bertag `@known-bug`:
@@ -176,8 +208,13 @@ Detail lengkap ada di sheet **Temuan Eksplorasi** pada test plan. Temuan yang me
 | ID | Ringkasan | Test |
 |---|---|---|
 | F-01 | Hasil kalkulator tidak dihitung ulang saat input diubah setelah klik Hitung | TC-CALC-014 |
+| F-02 | Typo heading "INFOMASI UNTUK MUZAKI" di halaman konfirmasi ZIS | TC-KONF-001 |
+| F-05 | Nominal fidyah tetap terisi setelah jenis dana diganti | TC-PAY-006 |
+| F-09 | Tanggal penjemputan zakat dapat diisi tanggal yang sudah lewat | TC-JMP-008 |
 | F-12 | Jenis dana dan nominal dari kalkulator tidak terbawa ke form pembayaran | TC-CALC-015b |
 | F-15 | Tidak ada validasi nominal minimum pada form jemput zakat di sisi klien | TC-JMP-007 |
+| F-19 | Field nominal kalkulator menerima koma | TC-CALC-010 |
+| F-20 | Gambar captcha form jemput zakat gagal dimuat, sehingga form tidak dapat dikirim | TC-JMP-003 |
 
 Setelah perbaikan dirilis, jalankan `npm run test:known-bug`. Test yang sudah lulus bisa dilepas dari tag `@known-bug`.
 
@@ -201,9 +238,11 @@ Nilai yang bisa berubah karena kebijakan disimpan di fixture, jadi cukup diperba
 | `fixtures/menu.json` | Struktur menu dan URL tujuan |
 | `fixtures/navigation.json` | Kartu homepage dan quick menu |
 | `fixtures/rekening.json` | Jenis dana rekening dan contoh nomor rekening |
-| `fixtures/jemput-zakat.json` | Field wajib dan minimal nominal jemput zakat |
+| `fixtures/jemput-zakat.json` | Field wajib, label, opsi jenis & metode, minimal nominal jemput zakat |
+| `fixtures/konfirmasi-zis.json` | Heading, tombol, dan URL form konfirmasi ZIS |
 
 ## Roadmap
 
 - **Fase 1 (selesai):** test P1 dan smoke, Page Object, report, CI.
-- **Fase 2:** test P2/P3, yaitu kalkulator perusahaan/perdagangan/emas, multi-bahasa, berita, laporan PDF, profil, program, responsive, SEO, aksesibilitas (`cypress-axe`), dan performa dasar.
+- **Fase 2 Batch A (selesai):** form & kalkulator – kalkulator perusahaan/perdagangan/emas, form bayar zakat, jemput zakat, konfirmasi ZIS, newsletter.
+- **Fase 2 Batch B–D:** berita, laporan PDF, profil, program, multi-bahasa, footer, halaman error, responsive, SEO, aksesibilitas (`cypress-axe`), dan performa dasar.

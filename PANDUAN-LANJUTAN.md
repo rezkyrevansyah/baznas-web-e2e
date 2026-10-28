@@ -20,7 +20,7 @@ Dokumen ini dibagi menjadi 4 bagian:
 | Test plan (22 modul, 34 skenario, 112 test case) | Selesai, ada di `docs/Test_Plan_Cypress_BAZNAS.xlsx` |
 | Struktur project, Page Object, fixtures, report, CI | Selesai (TypeScript `strict`) |
 | Fase 1: 41 test case P1 + smoke (42 test, 8 spec) | **Stabil** (Sesi 1, 27 Okt 2026): `npm test` 39/39 hijau 2× berturut-turut; 3 test `@known-bug` gagal sesuai temuan F-01, F-12, F-15 |
-| Fase 2: 71 test case P2/P3 | Belum dibuat (Batch A–D) |
+| Fase 2: 71 test case P2/P3 | Batch A (28 TC) **selesai** (Sesi 3, 28 Okt 2026); Batch B–D belum |
 | Finishing (lint, report online, notifikasi, laporan) | Belum |
 
 > Pada Sesi 1, F-14 terverifikasi sudah diperbaiki di situs sehingga TC-PAY-012..014 tidak lagi bertag `@known-bug`. Jumlah test known-bug sekarang 3, bukan 6.
@@ -410,7 +410,7 @@ Verifikasi ulang dengan `curl -sL <url>` sebelum dipakai, karena website bisa be
 | Form | `form#formjemputzakat.needs-validation` (novalidate), action `/Service/submit_jemput_zakat` |
 | Field | `nama`*, `npwz`, `hp`*, `email`* (type email), `tanggal_jemput`* (date, tanpa `min`), `jam_jemput`* (time), `jenis_bayar`* (Zakat Mal, Zakat Fitrah, Zakat Penghasilan, Infaq/Sedekah, Fidyah, Kurban), `metode_bayar`* (Uang, Barang), `nominal`*, `keterangan`, `alamat`* (textarea), `captcha_code`* |
 | Submit | `#btn-submit-data`; handler `submit` → AJAX `POST …/assets/captcha/verifycaptcha.php`, alert "Captcha yang Anda masukan tidak cocok" jika `'false'` |
-| Captcha | `img.captchaimg` + link "klik di sini untuk refresh" |
+| Captcha | `img#captchaimg` + link `a[href*="refreshCaptcha"]` ("di sini"). Saat ini gambar gagal dimuat (F-20) |
 
 **Halaman lain**
 
@@ -465,14 +465,14 @@ Jika Python tidak tersedia, tuliskan perubahan yang perlu dilakukan dalam bentuk
 | ID | Ringkasan | Severity | Test |
 |---|---|---|---|
 | F-01 | Hasil kalkulator tidak dihitung ulang saat input diubah setelah klik Hitung | Medium | TC-CALC-014 (@known-bug) |
-| F-02 | Typo heading "INFOMASI UNTUK MUZAKI" | Low | – |
+| F-02 | Typo heading "INFOMASI UNTUK MUZAKI" | Low | TC-KONF-001 (@known-bug) |
 | F-03 | Title `/form-jemput-zakat` salah | Low | – |
 | F-04 | Sub-jenis "Infak" berisi item berlabel "Sedekah …" (perlu konfirmasi) | Low | – |
-| F-05 | Nominal fidyah tetap terisi setelah ganti jenis dana | Low | TC-PAY-006 (Fase 2) |
+| F-05 | Nominal fidyah tetap terisi setelah ganti jenis dana | Low | TC-PAY-006 (@known-bug) |
 | F-06 | Ganti bahasa ke English tidak mengubah konten (perlu verifikasi) | Medium | Batch C |
 | F-07 | Label quick menu "Layanan Mustahk" | Low | – |
 | F-08 | Banner Ramadhan masih tampil di Oktober | Low | – |
-| F-09 | Tanggal jemput tanpa batas minimum | Low | TC-JMP-008 (Fase 2) |
+| F-09 | Tanggal jemput tanpa batas minimum | Low | TC-JMP-008 (@known-bug) |
 | F-10 | Title `/program/*` tanpa spasi | Low | Batch D (SEO) |
 | F-11 | Halaman 404 tanpa title | Low | TC-ERR-001 |
 | F-12 | Nominal/jenis dari kalkulator hilang di form pembayaran | Medium | TC-CALC-015b (@known-bug) |
@@ -480,8 +480,12 @@ Jika Python tidak tersedia, tuliskan perubahan yang perlu dilakukan dalam bentuk
 | F-14 | Form bayar lanjut tanpa validasi nama/HP/email — **sudah diperbaiki** (diverifikasi 27 Okt 2026) | Medium | TC-PAY-012..014 (tag @known-bug dilepas) |
 | F-15 | Tidak ada validasi minimal Rp1.000.000 di jemput zakat (klien) | Low | TC-JMP-007 (@known-bug) |
 | F-16 | Field "Jumlah penghasilan" bisa diedit manual | Low | – |
+| F-17 | Hasil zakat perusahaan/perdagangan tidak dibulatkan; desimal ikut diformat ribuan (Rp100.000.001 → "2.500.000.025") | Medium | – (usulan TC baru) |
+| F-18 | Tab Kalkulator bayarzakat: nisab zakat maal Rp82.312.725 ≠ Rp91.681.728, dan dicek sebelum dikurangi hutang (perlu konfirmasi) | Medium | TC-PAY-020 (lulus) |
+| F-19 | Field nominal kalkulator menerima koma ("1,5") | Low | TC-CALC-010 (@known-bug) |
+| F-20 | Gambar captcha jemput zakat gagal dimuat (error PHP tampil ke publik); form tidak dapat dikirim | High | TC-JMP-003 (@known-bug) |
 
-Temuan baru dimulai dari **F-17**.
+Temuan baru dimulai dari **F-21**.
 
 ### 3.8 Definition of Done (per sesi / batch)
 
@@ -969,7 +973,7 @@ Total 71 test case (P2/P3), dikelompokkan per batch. Tag prioritas (`@P2`/`@P3`)
 
 - [x] Sesi 1: Fase 1 stabil (hijau 2× berturut-turut)
 - [x] Sesi 2: repo publik di GitHub, workflow CI aktif dan hijau
-- [ ] Sesi 3: Batch A selesai (28 TC)
+- [x] Sesi 3: Batch A selesai (28 TC)
 - [ ] Sesi 4: Batch B selesai (16 TC)
 - [ ] Sesi 5: Batch C selesai (14 TC)
 - [ ] Sesi 6: Batch D selesai (13 TC)

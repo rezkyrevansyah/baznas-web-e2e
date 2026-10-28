@@ -16,6 +16,14 @@ class JemputZakatPage {
     return cy.get('#btn-submit-data')
   }
 
+  captchaImage() {
+    return cy.get<HTMLImageElement>('img#captchaimg')
+  }
+
+  refreshCaptchaLink() {
+    return cy.get('a[href*="refreshCaptcha"]')
+  }
+
   /** true jika form valid menurut constraint validation browser. */
   isValid() {
     return this.form().then(($form) => $form[0].checkValidity())

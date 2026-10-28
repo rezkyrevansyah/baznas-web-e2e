@@ -16,5 +16,24 @@
     "nominal",
     "alamat",
     "captcha_code"
-  ]
+  ],
+  "requiredSelects": ["jenis_bayar", "metode_bayar"],
+  "optionalFields": ["npwz", "keterangan"],
+  "labels": [
+    "Nama",
+    "NPWZ",
+    "No. HP",
+    "Email",
+    "Tanggal Penjemputan",
+    "Jam Penjemputan",
+    "Jenis Pembayaran",
+    "Metode Pembayaran",
+    "Nominal",
+    "Keterangan",
+    "Alamat Penjemputan",
+    "Masukan kode di atas"
+  ],
+  "infoLayanan": ["Jabodetabek", "minimal ZIS Rp1.000.000"],
+  "jenisBayar": ["Zakat Mal", "Zakat Fitrah", "Zakat Penghasilan", "Infaq/Sedekah", "Fidyah", "Kurban"],
+  "metodeBayar": ["Uang", "Barang"]
 }

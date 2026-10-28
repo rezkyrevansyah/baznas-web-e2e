@@ -19,10 +19,31 @@
     "Zakat Mal Perindustrian",
     "Zakat Mal Rikaz"
   ],
+  "subJenisInfak": [
+    "Sedekah Palestina",
+    "Sedekah Dunia Islam",
+    "Sedekah BAZNAS",
+    "Sedekah Bencana",
+    "Sedekah Daging",
+    "Sedekah Yatim",
+    "Infaq/Sedekah",
+    "Infak Kemanusiaan",
+    "Infak Pendidikan",
+    "Infak Kesehatan",
+    "Infak Ekonomi",
+    "Infak Dakwah"
+  ],
+  "subJenisSedekah": ["Sedekah BAZNAS"],
+  "pernyataanMuzaki": [
+    "Muzaki menyatakan bahwa zakat yang ditunaikan berasal dari sumber halal",
+    "bukan hasil pencucian uang",
+    "menyetujui untuk menerima Bukti Setor Zakat (BSZ)"
+  ],
   "metodePembayaran": [
     "bsi", "bca", "mandiri", "bni", "bri", "cimb", "muamalat", "permata", "qris", "blu",
     "gopay", "shopee", "ovo", "dana", "jenius", "linkaja", "indomaret", "credit", "paypal"
   ],
+  "pesanMinimalVirtualAccount": "Minimal pembayaran Rp10.000",
   "pesanValidasi": {
     "nominal": "Mohon Masukkan Nominal Donasi",
     "nama": "Mohon Masukkan Nama",

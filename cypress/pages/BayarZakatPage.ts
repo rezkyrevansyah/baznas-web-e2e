@@ -22,6 +22,26 @@ export const sel = {
   tombolPilihPembayaran: '#next-button',
   tombolBayar: '#pay-button',
   metode: 'input[name="metode"]',
+  // Layar Metode Pembayaran (#nextstep)
+  logoMetode: '#nextstep img.bankimg, #nextstep img[id$="imgid"]',
+  metodeBank: '#nextstep input.bank',
+  ikonMetodeNonaktif: '#nextstep img.bankdisabledid',
+  // Tab "Kalkulator" (#tab2)
+  tabKalkulator: '#tab2',
+  opsiZakatPenghasilan: '#opt-zakat-penghasilan',
+  opsiZakatMaal: '#opt-zakat-maal',
+  calcPendapatan: '#pendapatan',
+  calcLainnya: '#lainnya',
+  calcHasilPenghasilan: '#valuepenghasilan',
+  calcTotalPenghasilan: '#totalpendapatanlabel',
+  calcBayarPenghasilan: '#bayarpenghasilan',
+  calcEmasPerak: '#emasperak',
+  calcTabungan: '#tabungan',
+  calcKendaraan: '#kendaraan',
+  calcHutang: '#hutang',
+  calcHasilMaal: '#valuemaal',
+  calcTotalMaal: '#jumlahmaallabel',
+  calcBayarMaal: '#bayarmaal',
 }
 
 class BayarZakatPage {
@@ -52,6 +72,21 @@ class BayarZakatPage {
 
   klikPilihPembayaran() {
     this.get('tombolPilihPembayaran').should('be.visible').click()
+  }
+
+  bukaTabKalkulator() {
+    cy.contains('button.tablinks', 'Kalkulator').click()
+    this.get('tabKalkulator').should('be.visible')
+  }
+
+  /** Isi field kalkulator (default "0") lalu biarkan formatter halaman berjalan. */
+  isiKalkulator(key: keyof typeof sel, value: number) {
+    this.get(key).clear().type(String(value))
+  }
+
+  /** Klik tombol kalkulator berdasarkan fungsi onclick-nya, mis. 'hitungmaal'. */
+  klikKalkulator(fungsi: string) {
+    this.get('tabKalkulator').find(`button[onclick^="${fungsi}("]`).filter(':visible').click()
   }
 
   /** Halaman tidak berpindah ke langkah pemilihan metode pembayaran. */
